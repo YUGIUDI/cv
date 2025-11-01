@@ -4,28 +4,73 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Yehia Ali - Data Analyst | CRM Manager | Power BI Expert</title>
-
-    <!-- Primary Meta -->
-    <meta name="description" content="Professional CV of Yehia Ali - Data Analyst and CRM Manager with 8+ years of experience in leveraging customer data to drive engagement, retention, and business growth." />
+    <meta name="description" content="Professional CV of Yehia Ali - Data Analyst and CRM Manager with 8+ years of experience..." />
     <meta name="author" content="Yehia Ali" />
     <meta name="theme-color" content="#0b0f19" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph basics -->
     <meta property="og:title" content="Yehia Ali - Data Analyst | CRM Manager" />
     <meta property="og:description" content="Professional CV showcasing expertise in data analysis, CRM management, and business intelligence with Power BI, Tableau, and SQL." />
     <meta property="og:type" content="website" />
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="/assets/index-CZ8uziTD.css" />
-
-    <!-- JS -->
-    <script type="module" src="/assets/index-CxDEp8Vt.js"></script>
+    <!-- Attempt to load CSS & JS from relative assets folder.
+         Use relative paths (no leading slash) so this works from subpaths like /cv/ -->
+    <link id="app-css" rel="stylesheet" href="assets/index-CZ8uziTD.css" />
   </head>
 
   <body>
-    <noscript>
-      Please enable JavaScript to view this site properly.
-    </noscript>
+    <noscript>Please enable JavaScript to view this site properly.</noscript>
     <div id="root"></div>
+
+    <!-- Diagnostic loader: fetch assets first to show clear 404 messages -->
+    <script>
+      (function () {
+        const cssHref = 'assets/index-CZ8uziTD.css';
+        const jsSrc = 'assets/index-CxDEp8Vt.js';
+
+        function checkFetch(url) {
+          return fetch(url, { method: 'HEAD' })
+            .then(resp => ({ ok: resp.ok, status: resp.status }))
+            .catch(err => ({ ok: false, status: 'network error', err }));
+        }
+
+        async function runChecks() {
+          const css = await checkFetch(cssHref);
+          const js = await checkFetch(jsSrc);
+
+          if (!css.ok) {
+            console.warn('CSS not found or failed to load:', cssHref, css);
+            // Add a tiny inline fallback so layout isn't completely broken:
+            const style = document.createElement('style');
+            style.textContent = 'body{font-family:system-ui,Arial,Helvetica,sans-serif;padding:20px} #root{max-width:900px;margin:0 auto}';
+            document.head.appendChild(style);
+            const linkEl = document.getElementById('app-css');
+            if (linkEl) linkEl.remove();
+          } else {
+            console.log('CSS available:', cssHref, 'status', css.status);
+          }
+
+          if (!js.ok) {
+            console.error('JS not found or failed to load:', jsSrc, js);
+            // Show helpful UI so you know site JS didn't load:
+            const el = document.getElementById('root');
+            if (el) el.innerHTML = '<h2>App script not found</h2><p>Check assets/index-CxDEp8Vt.js — see console for details.</p>';
+            return;
+          }
+
+          console.log('JS available:', jsSrc, 'status', js.status);
+
+          // If JS exists, inject it normally so your app runs:
+          const s = document.createElement('script');
+          s.type = 'module';
+          s.src = jsSrc;
+          s.onload = () => console.log('App script loaded:', jsSrc);
+          s.onerror = (ev) => console.error('Failed to load script element:', jsSrc, ev);
+          document.body.appendChild(s);
+        }
+
+        runChecks();
+      })();
+    </script>
   </body>
 </html>
